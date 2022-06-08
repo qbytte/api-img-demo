@@ -1,9 +1,4 @@
-import {
-  ActivityIndicator,
-  FlatList,
-  Text,
-  View,
-} from "react-native";
+import { ActivityIndicator, FlatList, Text, View, Image } from "react-native";
 import { useEffect, useState } from "react";
 
 export default function App() {
@@ -12,9 +7,12 @@ export default function App() {
 
   const getMovies = async () => {
     try {
-      const response = await fetch("https://reactnative.dev/movies.json");
+      const response = await fetch(
+        "https://jsonplaceholder.typicode.com/photos?_start=0&_limit=5"
+      );
       const json = await response.json();
-      setData(json.movies);
+      console.log(json);
+      setData(json);
     } catch (error) {
       console.error(error);
     } finally {
@@ -28,12 +26,22 @@ export default function App() {
 
   return (
     <View style={{ flex: 1, padding: 24 }}>
-      {isLoading ? <ActivityIndicator /> : (
+      {isLoading ? (
+        <ActivityIndicator />
+      ) : (
         <FlatList
           data={data}
           keyExtractor={({ id }, index) => id}
           renderItem={({ item }) => (
-            <Text>{item.title}, {item.releaseYear}</Text>
+            <>
+              <Text>{item.title}</Text>
+              <Image
+                style={{ width: 150, height: 150 }}
+                source={{
+                  uri: item.url,
+                }}
+              />
+            </>
           )}
         />
       )}
